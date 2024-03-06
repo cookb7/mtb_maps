@@ -1,24 +1,7 @@
 import axios from "axios";
-import { useAppContext } from "../state/AppContext";
 
 
-export const updateMapCoords = (coords) => {
-  const { state, dispatch } = useAppContext();
-  console.log(coords);
-  // Calculate south
-  let south = coords[0] - coords[1];
-  // Calculate north
-  let north = coords[0] + coords[1];
-  // Calculate west
-  let west = coords[2] - coords[3];
-  // Calculate east
-  let east = coords[2] + coords[3];
-
-  search(dispatch, south, west, north, east);
-};
-
-
-const search = async (dispatch, south, west, north, east) => {
+export const search = async (dispatch, south, west, north, east) => {
   console.log('search');
   const xmlRequest = `
   <osm-script output="json" output-config="">
@@ -62,7 +45,7 @@ const search = async (dispatch, south, west, north, east) => {
     const trails = response.data;
     dispatch({type: "SET_TRAILS", payload: trails})
     console.log("loaded");
-    return trails.elements.map((item, index) => {
+    return trails.elements.map((item) => {
       if (item.tags !== undefined && item.geometry !== undefined) {
         if (item.tags.name !== undefined) {
         }
