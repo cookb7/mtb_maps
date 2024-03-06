@@ -3,7 +3,8 @@ import React, { createContext, useContext, useReducer } from "react";
 const AppContext = createContext();
 
 const initialState = {
-  trails: []
+  trails: [],
+  mapCenterCoords: []
   };
 
 const AppReducer = (state, action) => {

@@ -1,13 +1,21 @@
-import MapView, {Marker, PROVIDER_GOOGLE, Geojson, Polyline} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {View, Text, TouchableOpacity } from 'react-native';
-import { useEffect, useState, useRef } from 'react';
-import { search } from '../APIs/openStreet';
+import Trails from "./trails";
+import { updateMapCoords } from '../APIs/openStreet';
 import { useAppContext } from '../state/AppContext';
 
 const Map = () => {
     const { state } = useAppContext();
-
-    const coordinates = state.trails.elements[1].geometry.map(({ lat, lon }) => ({latitude: lat, longitude: lon}));
+   
+    const setMapCenter = (e) => {
+        let coords = [
+            e.latitude,
+            e.latitudeDelta,
+            e.longitude,
+            e.longitudeDelta
+        ];
+        updateMapCoords(coords);
+    };
     
     return (
         <View 
@@ -20,13 +28,15 @@ const Map = () => {
             followsUserLocation='true'
             showsMyLocationButton='true'
             showsCompass='true'
+            onRegionChangeComplete={e => setMapCenter(e)}
             >
-            <Polyline
-                coordinates={coordinates}
-                strokeWidth={6}
-                strokeColor='#000'
-            />
+            {state.trails && (
+                <Trails />
+            )}
             </MapView>
+            <TouchableOpacity className="bg-theme_dark_blue justify-center items-center">
+                <Text>Press me</Text>
+            </TouchableOpacity>
         </View>
     );
 };
